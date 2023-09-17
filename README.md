@@ -1,1 +1,1 @@
-# wether_app
+# react_nativ
