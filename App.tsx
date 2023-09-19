@@ -5,7 +5,9 @@ import Wether from './components/wether/Wether';
 
 export default function App() {
   return(
+    <View style={styles.container}>
     <Wether/>
+    </View>
   )
     
 }
