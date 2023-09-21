@@ -1,6 +1,7 @@
-import { StyleSheet, StatusBar, Text, View, Image } from 'react-native';
+import { StyleSheet, StatusBar, Text, View, Image, SafeAreaView, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 interface IMyWether{
@@ -75,25 +76,62 @@ export default function Wether(){
 
     },[])
 
+    let array = [{time:"9:00",temper:"+17°"},
+    {time:"10:00",temper:"+17°"},
+    {time:"11:00",temper:"+17°"},
+    {time:"12:00",temper:"+17°"}]
 
     return(
+        // <View style={styles.card}>
+        //     <View >
+        //         <Text>Город {country}</Text>
+        //         <Text>{airTemperature} °С</Text>
+        //         <Text>{fraze}</Text>
+        //     </View>
+        //     <View style={styles.dn}>
+        //         <View>
+        //             <Text>Днём</Text>
+        //             <Text>{dayTemperature}</Text>
+        //         </View>
+        //         <View>
+        //             <Text>Ночью</Text>
+        //             <Text>{nightTemperature}</Text>
+        //         </View>
+        
+        //     </View>
+        // </View>
+
         <View style={styles.card}>
             <View >
-                <p>Город {country}</p>
-                <p>{airTemperature} °С</p>
-                <p>{fraze}</p>
+                <Text  style={styles.country}>{country}</Text>
+                <View style={{alignItems: "center", justifyContent: "center",flexDirection:"row"}}>
+                    <Ionicons name='partly-sunny' size={60} color='black' />
+                    <Text style={{fontSize:40,color: "#FFFFFF",fontWeight: "500",textAlign:"center",marginLeft:5}}>{airTemperature}°</Text>
+                </View>
+                
+                <Text style={{fontSize:40,color: "#FFFFFF",fontWeight: "500",textAlign:"center"}}>{fraze}</Text>
             </View>
-            <View style={styles.dn}>
-                <div>
-                    <p>Днём</p>
-                    <p>{dayTemperature}</p>
-                </div>
-                <div>
-                    <p>Ночью</p>
-                    <p>{nightTemperature}</p>
-                </div>
-        
-            </View>
+        <View style={styles.line}>
+        </View>
+        <View >
+            
+            <ScrollView style={styles.list} horizontal={true}>
+                <View style={styles.listItem}>
+                    <Text style={{fontSize:20,color: "#FFFFFF",fontWeight: "500",textAlign:"center"}}>9:00</Text>
+                    <Ionicons name='partly-sunny' size={50} color='black' />
+                    <Text style={{fontSize:15,color: "#FFFFFF",fontWeight: "500",textAlign:"center"}}>+17°</Text>
+                </View>
+
+                {array.map(({time, temper})=>(
+                    <View style={styles.listItem}>
+                        <Text style={{fontSize:20,color: "#FFFFFF",fontWeight: "500",textAlign:"center"}}>{time}</Text>
+                        <Ionicons name='partly-sunny' size={50} color='black' />
+                        <Text style={{fontSize:15,color: "#FFFFFF",fontWeight: "500",textAlign:"center"}}>{temper}</Text>
+                    </View>
+                ))}
+
+            </ScrollView>
+        </View>
         </View>
     )
 
@@ -101,21 +139,42 @@ export default function Wether(){
 }
 
 const styles = StyleSheet.create({
-  dn:{
-    flex:1,
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 30,
-  },
   card:{
-    padding: 10,
     borderColor:"black",
-    flex:1,
     borderWidth:1,
-    backgroundColor: "red",
+    backgroundColor: "#A9A9A9",
     borderRadius:40,
     alignItems: "center",
     justifyContent: "center",
-    textAlign: "center",
-  }
+
+  },
+
+    list:{
+        maxWidth:150,
+        maxHeight:120,
+        marginLeft:20,
+        marginRight:20
+    },
+    listItem:{
+        paddingRight:15
+    },
+    line:{
+        minHeight:1,
+        minWidth: 100,
+    
+        backgroundColor:"white",
+        
+        marginBottom:15,
+        marginTop:10
+    },
+    textColor:{
+        color: "#FFFFFF",
+    },
+    country:{
+        fontSize:40,
+        color: "#FFFFFF",
+        fontWeight: "700",
+        textAlign:"center"
+    }
 });
+
