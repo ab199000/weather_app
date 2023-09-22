@@ -1,24 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, SafeAreaView } from 'react-native';
-import Wether from './components/wether/Wether';
-
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View, Image, SafeAreaView } from "react-native";
+import WetherWindow from "./components/wether/WetherWindow";
 
 export default function App() {
-  return(
+  return (
     <View style={styles.container}>
-    <Wether/>
+      <WetherWindow />
     </View>
-  )
-    
+  );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  textStyle:{
-    fontSize:50
-  }
+  textStyle: {
+    fontSize: 50,
+  },
 });
