@@ -1,166 +1,128 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, RefreshControl } from "react-native";
 import { useEffect, useState } from "react";
-import WeatherAtTheMoment from "../WeatherAtTheMoment/WeatherHere";
+import WeatherAtTheMoment from "../WeatherAtTheMoment/WeatherAtTheMoment";
 import WeatherList from "../WeatherList/WeatherList";
-import { getWeather } from "../../requests/weather";
-import { IMyWether } from "../../interfaces";
+import axios from "axios";
+import { getDailyForecast, getAirTemperature, getCity, get12HoursForecast, getCityData } from "../../requests/weather";
+import { DailyForecast, I12HoursForecast, IAirTemperature } from "../../interfaces/weatherInterfaces";
+
+import { keyLocation } from "../../variables";
+
+import * as Location from 'expo-location';
+import { ICityInfo } from "../../interfaces/locationInterfaces";
+
+import BackgroundGeolocation from 'react-native-background-geolocation';
+
+
 
 export default function WetherWindow() {
   // 293006
 
-  const [wether, setWether] = useState<IMyWether>();
+  const [wether, setWether] = useState<DailyForecast>();
 
-  // const [airTemperature, setAirTemperature] = useState<any>();
-  // const [country, setCountry] = useState();
-  // const [dayTemperature, setDayTemperature] = useState();
-  // const [nightTemperature, setNightTemperature] = useState();
-  // const [fraze, setFraze] = useState();
-  // const [weather12Hours, setweather12Hours] = useState<any>();
+  const [airTemperature, setAirTemperature] = useState<number>();
+  const [country, setCountry] = useState<string>();
+  // const [dayTemperature, setDayTemperature] = useState<number>();
+  // const [nightTemperature, setNightTemperature] = useState<number>();
+  // const [fraze, setFraze] = useState<string>();
+  const [weather12Hours, setweather12Hours] = useState<I12HoursForecast[]>();
 
-  const [weatherDan, setweatherDan] = useState<any>();
+  const [location, setLocation] = useState<Location.LocationObject>();
+  const [cityData, setCityData] = useState<ICityInfo>()
+
+  const [refreshing, setRefreshing] = useState<boolean>(false)
+
+  async function getPosition() {
+
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      console.log('Permission to access location was denied');
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    console.log(location);
+
+    setLocation(location);
+  }
+
+  async function getWeather(key:string) {
+    if (!key) return
+      setRefreshing(true)
+      // getCity(cityData?.Key) //получение города
+      //   .then((resp) => {
+      //     console.log(resp.data.LocalizedName);
+      //     setCountry(resp.data.LocalizedName);
+      //   }).catch((err) => { console.error(err) });
+
+      await getDailyForecast(key)
+        .then((resp) => {
+          setWether(resp.data.DailyForecasts[0]);
+          // setFraze(resp.data.DailyForecasts[0].Day.IconPhrase)
+          // setDayTemperature(resp.data.DailyForecasts[0].Temperature.Maximum.Value)
+          // setNightTemperature(resp.data.DailyForecasts[0].Temperature.Minimum.Value)
+
+        }).catch((err) => { console.error(err) });
+
+      await getAirTemperature(key)
+        .then((resp) => {
+          console.log(resp.data[0].Temperature.Metric.Value);
+          setAirTemperature(resp.data[0].Temperature.Metric.Value);
+
+        }).catch((err) => { console.error(err) });
+
+      await get12HoursForecast(key)
+        .then((resp) => {
+          setweather12Hours(resp.data);
+        }).catch((err) => { console.error(err) });
+
+
+    setRefreshing(false)
+
+  }
+
   useEffect(() => {
-    setweatherDan(getWeather());
-    // axios
-    //   .get(
-    //     "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=a4uQnXZVhfJ2140ChLWl2SXC8kxFZVo3&q=51.435117%2C%20%20-1.005089&language=ru"
-    //   )
-    //   .then((response) => {
-    //     console.log(response);
-    //     setCountry(response.data.LocalizedName);
-    //   });
+    getPosition()
+  }, [])
 
-    // axios
-    //   .get(
-    //     "http://dataservice.accuweather.com/forecasts/v1/daily/1day/330396?apikey=a4uQnXZVhfJ2140ChLWl2SXC8kxFZVo3&details=true&metric=true"
-    //   )
-    //   .then((response) => {
-    //     console.log(response.data.DailyForecasts[0]);
-    //     // setWether(JSON.stringify(response.data))
-    //     setWether(response.data.DailyForecasts[0]);
-    //     console.log(wether);
-    //   });
+  useEffect(() => {
+    if (location) {
+      let { latitude, longitude } = location?.coords
+      getCityData(latitude, longitude)
+        .then((resp) => {
+          console.log("CITY KEY:", resp.data.Key);
+          setCityData(resp.data)
+        }).catch((err) => { console.error(err) });
+    }
 
-    // axios
-    //   .get(
-    //     "http://dataservice.accuweather.com/currentconditions/v1/330396?apikey=a4uQnXZVhfJ2140ChLWl2SXC8kxFZVo3"
-    //   )
-    //   .then((response) => {
-    //     console.log(response);
-    //     setAirTemperature(response.data[0].Temperature.Metric.Value);
-    //   });
+  }, [location])
 
-    // axios
-    //   .get(
-    //     "http://dataservice.accuweather.com/forecasts/v1/daily/1day/298003?apikey=a4uQnXZVhfJ2140ChLWl2SXC8kxFZVo3&language=ru&metric=true"
-    //   )
-    //   .then((response) => {
-    //     console.log(response);
-    //     setDayTemperature(
-    //       response.data.DailyForecasts[0].Temperature.Maximum.Value
-    //     );
-    //     setNightTemperature(
-    //       response.data.DailyForecasts[0].Temperature.Minimum.Value
-    //     );
-    //     setFraze(response.data.DailyForecasts[0].Day.IconPhrase);
-    //   });
+  useEffect(() => {
+    
+    if(!cityData?.Key)return
+    let {Key}= cityData
+    getWeather(Key)
 
-    // axios
-    //   .get(
-    //     "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/330396?apikey=a4uQnXZVhfJ2140ChLWl2SXC8kxFZVo3&metric=true"
-    //   )
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     setweather12Hours(response.data);
-    //     console.log(weather12Hours);
-    //   });
-  }, [weatherDan]);
+  }, [cityData])
 
-  //   useEffect(() => {
-  //     if (weather12Hours) {
-  //       arr = weather12Hours?.map((e: any) => ({
-  //         time: e.DateTime.slice(11, 16),
-  //         temper: e.Temperature.Value,
-  //       }));
-  //     }
-  //   }, [weather12Hours]);
 
   return (
-    <View style={styles.card}>
-      {/* <View>
-        <Text style={styles.country}>{country}</Text>
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "row",
-          }}
-        >
-          <Ionicons name="partly-sunny" size={60} color="black" />
-          <Text
-            style={{
-              fontSize: 40,
-              color: "#FFFFFF",
-              fontWeight: "500",
-              textAlign: "center",
-              marginLeft: 5,
-            }}
-          >
-            {airTemperature}°
-          </Text>
+    <View style={{ paddingTop: 50 }}>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={getPosition} />}>
+        <View style={styles.card}>
+          {cityData?.LocalizedName && wether?.Day.IconPhrase && airTemperature ?
+            <WeatherAtTheMoment
+              country={cityData?.LocalizedName}
+              fraze={wether?.Day.IconPhrase}
+              airTemperature={airTemperature}
+            />
+            : <></>
+          }
+          <View style={styles.line}></View>
+
+          <WeatherList weather12Hours={weather12Hours} />
         </View>
-
-        <Text
-          style={{
-            fontSize: 40,
-            color: "#FFFFFF",
-            fontWeight: "500",
-            textAlign: "center",
-          }}
-        >
-          {fraze}
-        </Text>
-      </View> */}
-      <WeatherAtTheMoment
-        country={"Калуга"} //{weatherDan.country}
-        fraze={"Ясно"} //{weatherDan.fraze}
-        airTemperature={13} //{weatherDan.airTemperature}
-      />
-      <View style={styles.line}></View>
-      {/* <View>
-        <ScrollView style={styles.list} horizontal={true}>
-          {weather12Hours?.map((element: any, index: number) => {
-            console.log(element);
-
-            return (
-              <View style={styles.listItem}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    textAlign: "center",
-                  }}
-                >
-                  {element.DateTime.slice(11, 16)}
-                </Text>
-                <Ionicons name="partly-sunny" size={50} color="black" />
-                <Text
-                  style={{
-                    fontSize: 15,
-                    color: "#FFFFFF",
-                    fontWeight: "500",
-                    textAlign: "center",
-                  }}
-                >
-                  {element.Temperature.Value}°
-                </Text>
-              </View>
-            );
-          })}
-        </ScrollView>
-      </View> */}
-
-      <WeatherList weather12Hours={1} />
+      </ScrollView>
     </View>
   );
 }
@@ -173,6 +135,9 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     alignItems: "center",
     justifyContent: "center",
+    padding: 15,
+    height: 500,
+    marginHorizontal: 10
   },
 
   list: {
