@@ -10,11 +10,15 @@ interface IProps {
 export default function WeatherList({
   weather12Hours,
 }: IProps) {
+
+  function choosPicture(IconPhrase:any){
+    return IconPhrase.toLowerCase();
+  }
   return (
-    <View>
+    <View style={styles.container}>
       <ScrollView style={styles.list} horizontal={true} showsHorizontalScrollIndicator={false}>
-        {weather12Hours?.map(({ DateTime, Temperature }: I12HoursForecast, index: number) => {
-          console.log(DateTime, Temperature);
+        {weather12Hours?.map(({ DateTime, Temperature, IconPhrase }: I12HoursForecast, index: number) => {
+          console.log(DateTime, Temperature, IconPhrase);
 
           return (
             <View key={index} style={styles.listItem}>
@@ -29,7 +33,7 @@ export default function WeatherList({
                 {new Date(DateTime).getHours()}:00
 
               </Text>
-              <Ionicons name="partly-sunny" size={50} color="black" />
+              <Ionicons name={IconPhrase? choosPicture(IconPhrase) : "partly-sunny"} size={50} color="black" />
               <Text
                 style={{
                   fontSize: 15,
@@ -49,6 +53,9 @@ export default function WeatherList({
 }
 
 const styles = StyleSheet.create({
+  container:{
+    width:"95%",
+  },
   list: {
     // maxWidth: 150,
     // marginHorizontal:10,

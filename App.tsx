@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image, SafeAreaView } from "react-native";
-import WetherWindow from "./components/wether/WetherWindow";
+import WetherWindow from "./components/wether/WetherWindow.1";
 
 export default function App() {
   return (
@@ -13,11 +13,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop:20
+    // alignItems: "center",
+    // justifyContent: "center",
+    // marginTop:10
   },
   textStyle: {
     fontSize: 50,
   },
-});
+});                                                               

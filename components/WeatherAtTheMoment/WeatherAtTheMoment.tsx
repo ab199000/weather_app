@@ -10,35 +10,46 @@ import {
 import { useState, useEffect } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 interface IProps{
-  country:string,fraze:string,airTemperature:number
+  country:string,fraze:string,airTemperature:number,IconPhrase:any
 }
-export default function WeatherAtTheMoment({country,fraze,airTemperature}:IProps) {
+export default function WeatherAtTheMoment({country,fraze,airTemperature,IconPhrase}:IProps) {
   useEffect(()=>{
     
     // console.log("COUNTRY:", country);
     
   },[])
+
+  function choosPicture(IconPhrase:any){
+    return IconPhrase.toLowerCase();
+  }
+  
   return (
     <View>
-      <Text style={styles.country}>{country}</Text>
+      <View style={styles.location}>
+          <Ionicons name="location-sharp" size={60} color="black" />
+          <Text style={styles.countryLocation}>{country}</Text>
+      </View>
+      {/* <Text style={styles.country}>{country}</Text> */}
       <View
         style={{
           alignItems: "center",
           justifyContent: "center",
-          flexDirection: "row",
+          marginTop:60,
+          marginBottom:60
+          // flexDirection: "row",
         }}
       >
-        <Ionicons name="partly-sunny" size={60} color="black" />
+        <Ionicons name={IconPhrase? choosPicture(IconPhrase) : "partly-sunny"} size={90} color="black" />
         <Text
           style={{
             fontSize: 40,
             color: "#FFFFFF",
             fontWeight: "500",
             textAlign: "center",
-            marginLeft: 5,
+            // marginLeft: 5,
           }}
         >
-          {airTemperature}°
+          {Math.round(airTemperature)}°
         </Text>
       </View>
 
@@ -48,6 +59,7 @@ export default function WeatherAtTheMoment({country,fraze,airTemperature}:IProps
           color: "#FFFFFF",
           fontWeight: "500",
           textAlign: "center",
+          marginBottom:40,
         }}
       >
         {fraze}
@@ -62,5 +74,13 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "700",
     textAlign: "center",
+  },
+  location:{
+    flexDirection: 'row',
+  },
+  countryLocation:{
+    fontSize: 40,
+    color: "#FFFFFF",
+    fontWeight: "700",
   },
 });
