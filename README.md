@@ -1,3 +1,4 @@
 # react_nativ
-npm i
+
+npm i  
 npx expo start --tunnel
