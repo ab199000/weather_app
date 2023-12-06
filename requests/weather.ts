@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ICityInfo, ILocation } from "../interfaces/locationInterfaces";
+import { ICityInfo, ICountryesName, ILocation } from "../interfaces/locationInterfaces";
 import { IDailyForecast, IAirTemperature, IWeatherOnDay, I12HoursForecast } from "../interfaces/weatherInterfaces";
 import { api_key } from "../variables";
 
@@ -31,4 +31,13 @@ export function get12HoursForecast(city_key: string) {
 
 export function getCityData(lat:number,lon:number){
   return axios.get<ICityInfo>(`http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${api_key}&q=${lat}%2C%20${lon}&language=ru`)
+}
+
+
+export function getCountryesNames(){
+  return axios.get(`http://dataservice.accuweather.com/locations/v1/adminareas/RU?apikey=${api_key}&language=ru`)
+}
+
+export function searchCity(city:string){
+  return axios.get(`http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${api_key}&q=${city}&language=ru`)
 }

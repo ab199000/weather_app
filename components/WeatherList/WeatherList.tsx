@@ -12,7 +12,26 @@ export default function WeatherList({
 }: IProps) {
 
   function choosPicture(IconPhrase:any){
-    return IconPhrase.toLowerCase();
+    switch(IconPhrase.toLowerCase()) {
+      case 'cloudy':  // if (x === 'value1')
+        return 'cloudy'
+        break
+    
+      case 'snow':  // if (x === 'value2')
+        return 'snow'
+        break
+    
+      default:
+        return 'partly-sunny'
+        break
+    }
+    // const words = IconPhrase.split(' ')
+    // for(let i = 0; i<words.length;i++){
+    //   if(words[i].toLowerCase() == 'snow' || words[i].toLowerCase() == 'cloudy'){
+    //     return words[i].toLowerCase();
+    //   }
+    // }
+    // return false
   }
   return (
     <View style={styles.container}>

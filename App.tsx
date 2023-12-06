@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image, SafeAreaView } from "react-native";
 import WetherWindow from "./components/wether/WetherWindow.1";
 
+
 export default function App() {
   return (
     <View style={styles.container}>
@@ -21,3 +22,5 @@ const styles = StyleSheet.create({
     fontSize: 50,
   },
 });                                                               
+
+

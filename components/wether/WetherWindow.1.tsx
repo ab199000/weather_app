@@ -21,6 +21,7 @@ export default function WetherWindow() {
   const [cityData, setCityData] = useState<ICityInfo>();
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
+
   async function getPosition() {
 
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -41,6 +42,8 @@ export default function WetherWindow() {
 
     await getDailyForecast(key)
       .then((resp) => {
+        console.log(key);
+        
         console.log(resp.data.DailyForecasts[0]);
 
         setWether(resp.data.DailyForecasts[0]);
@@ -70,6 +73,8 @@ export default function WetherWindow() {
   }, []);
 
   useEffect(() => {
+    
+
     if (location) {
       let { latitude, longitude } = location?.coords;
       getCityData(latitude, longitude)
@@ -77,6 +82,7 @@ export default function WetherWindow() {
           console.log("CITY KEY:", resp.data.Key);
           setCityData(resp.data);
         }).catch((err) => { console.error(err); });
+        return
     }
 
   }, [location]);
@@ -103,7 +109,8 @@ export default function WetherWindow() {
               country={cityData?.LocalizedName}
               fraze={wether?.Day.IconPhrase}
               airTemperature={airTemperature}
-              IconPhrase={weather12Hours[0].IconPhrase} />
+              IconPhrase={weather12Hours[0].IconPhrase}
+              setLocation={setLocation} />
             : <>
               <Text>Error</Text>
             </>}

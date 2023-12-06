@@ -128,3 +128,14 @@ export interface TimeZone {
     GmtOffset:        number;
     IsDaylightSaving: boolean;
 }
+
+
+
+
+////////////////////////////////////
+
+
+
+export interface ICountryesName{
+    ID: string, EnglishName:string
+}

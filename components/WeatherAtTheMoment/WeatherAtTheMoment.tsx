@@ -9,10 +9,12 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import SelectCountryScreen from "../dropMenu/DropdownComponent";
+import DropdownComponent from "../dropMenu/DropdownComponent";
 interface IProps{
-  country:string,fraze:string,airTemperature:number,IconPhrase:any
+  country:string,fraze:string,airTemperature:number,IconPhrase:any,setLocation:any
 }
-export default function WeatherAtTheMoment({country,fraze,airTemperature,IconPhrase}:IProps) {
+export default function WeatherAtTheMoment({country,fraze,airTemperature,IconPhrase,setLocation}:IProps) {
   useEffect(()=>{
     
     // console.log("COUNTRY:", country);
@@ -20,14 +22,35 @@ export default function WeatherAtTheMoment({country,fraze,airTemperature,IconPhr
   },[])
 
   function choosPicture(IconPhrase:any){
-    return IconPhrase.toLowerCase();
+    // const words = IconPhrase.split(' ')
+    switch(IconPhrase.toLowerCase()) {
+      case 'cloudy':  // if (x === 'value1')
+        return 'cloudy'
+        break
+    
+      case 'snow':  // if (x === 'value2')
+        return 'snow'
+        break
+    
+      default:
+        return 'partly-sunny'
+        break
+    }
+    // for(let i = 0; i<words.length;i++){
+    //   if(words[i].toLowerCase() == 'snow' || words[i].toLowerCase() == 'cloudy'){
+    //     return words[i].toLowerCase();
+    //   }
+    // }
+    // return false
   }
   
   return (
     <View>
+      <DropdownComponent cityName = {country} setLocation={setLocation}/>
       <View style={styles.location}>
           <Ionicons name="location-sharp" size={60} color="black" />
           <Text style={styles.countryLocation}>{country}</Text>
+          
       </View>
       {/* <Text style={styles.country}>{country}</Text> */}
       <View
