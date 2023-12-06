@@ -83,14 +83,6 @@ import { getCountryesNames, searchCity } from '../../requests/weather';
             setIsFocus(false);
             searchCityOnName(item.value)
           }}
-          // renderLeftIcon={() => (
-          //   <AntDesign
-          //     style={styles.icon}
-          //     color={isFocus ? 'blue' : 'black'}
-          //     name="Safety"
-          //     size={20}
-          //   />
-          // )}
         />
       </View>
     )};
