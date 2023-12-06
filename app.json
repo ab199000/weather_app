@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "filmfinderHD",
-    "slug": "filmfinderHD",
+    "name": "accu-weather",
+    "slug": "accu-weather",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
